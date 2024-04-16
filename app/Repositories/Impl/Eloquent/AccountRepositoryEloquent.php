@@ -29,4 +29,12 @@ class AccountRepositoryEloquent implements AccountRepository
 
         return $account;
     }
+
+    public function subBalance(int $accountId, float $value): Account
+    {
+        $account = $this->getAccount($accountId);
+        $account->balance = $account->balance - $value;
+        $account->save();
+        return $account;
+    }
 }

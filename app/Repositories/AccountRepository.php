@@ -20,4 +20,9 @@ interface AccountRepository
      * Método responsável por criar uma conta
      */
     public function createAccount(int $accountId, float $value): Account;
+
+    /**
+     * Método responsável por subtrair saldo da conta
+     */
+    public function subBalance(int $accountId, float $value): Account;
 }

@@ -10,6 +10,12 @@ class AccountService
 {
     private AccountRepository $accountRepository;
 
+    private $taxesByPaymentMethod = [
+        PaymentMethod::PIX->value => 1,
+        PaymentMethod::DEBIT_CARD->value => 1.03,
+        PaymentMethod::CREDIT_CARD->value => 1.05
+    ];
+
     public function __construct(AccountRepository $accountRepository)
     {
         $this->accountRepository = $accountRepository;
@@ -46,5 +52,42 @@ class AccountService
 
         // Adiciona o saldo na conta
         return $this->accountRepository->addBalance($accountId, $value);
+    }
+
+    /**
+     * Método responsável por remover saldo da conta
+     */
+    public function subBalance(int $accountId, float $value): Account
+    {
+        return $this->accountRepository->subBalance($accountId, $value);
+    }
+
+    /**
+     * Método responsável por capturar a taxa de pagamento de acordo com o tipo
+     */
+    public function getTaxByPaymentType(PaymentMethod $paymentMethod): float
+    {
+        return $this->taxesByPaymentMethod[$paymentMethod->value] ?? 1;
+    }
+
+    /**
+     * Método responsável por calcular o valor com as taxas do tipo de pagamento
+     */
+    public function calculateValueWithTaxes(
+        float $transactionValue,
+        PaymentMethod $paymentMethod
+    ): float {
+        return $transactionValue * $this->getTaxByPaymentType($paymentMethod);
+    }
+
+    /**
+     * Método responsável por validar se a conta tem saldo para realizar a
+     * operação
+     */
+    public function checkIfAccountHasBalance(
+        float $accountBalance,
+        float $transactionValueWithTaxes
+    ): bool {
+        return $accountBalance >= $transactionValueWithTaxes;
     }
 }

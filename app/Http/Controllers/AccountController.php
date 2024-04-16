@@ -36,13 +36,16 @@ class AccountController extends Controller
             'saldo' => $account->balance
         ]);
     }
+
     /**
      * Método responsável por adicionar saldo à conta
      */
     public function addBalance(AddBalanceRequest $request)
     {
+        // Captura o id da conta
         $accountId = $request->get('conta_id', null);
 
+        // Adiciona saldo ou cria a conta para o id informado
         $account = $this->accountService->addBalanceOrCreateAccount(
             $accountId,
             $request->get('valor', null)
@@ -52,6 +55,6 @@ class AccountController extends Controller
         return response()->json([
             'conta_id' => $account->id,
             'saldo' => $account->balance
-        ]);
+        ], 201);
     }
 }
