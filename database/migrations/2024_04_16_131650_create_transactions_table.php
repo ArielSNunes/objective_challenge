@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('account_id')->unsigned();
+            $table->char('payment_method', 1);
+            $table->decimal('value')->comment('Valor da transação, em centavos');
             $table->timestamps();
+            $table->foreign('account_id')->references('id')->on('accounts');
         });
     }
 

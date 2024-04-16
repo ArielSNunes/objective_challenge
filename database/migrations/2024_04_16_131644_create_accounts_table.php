@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
+            $table->decimal('balance')->comment('Saldo da conta, em centavos');
             $table->timestamps();
         });
     }
