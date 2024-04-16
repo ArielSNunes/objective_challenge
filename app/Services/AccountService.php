@@ -28,4 +28,23 @@ class AccountService
         // Retorna a busca da conta no repository
         return $this->accountRepository->getAccount($accountId);
     }
+
+    /**
+     * Método responsável por criar ou adicionar saldo numa conta
+     */
+    public function addBalanceOrCreateAccount(
+        int $accountId,
+        float $value
+    ): Account {
+        // Busca a conta
+        $account = $this->getAccountData($accountId);
+
+        // Caso não exista, cria com o valor informado
+        if (!$account) {
+            return $this->accountRepository->createAccount($accountId, $value);
+        }
+
+        // Adiciona o saldo na conta
+        return $this->accountRepository->addBalance($accountId, $value);
+    }
 }

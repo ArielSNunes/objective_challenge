@@ -11,4 +11,22 @@ class AccountRepositoryEloquent implements AccountRepository
     {
         return Account::find($accountId);
     }
+
+    public function addBalance(int $accountId, float $value): Account
+    {
+        $account = $this->getAccount($accountId);
+        $account->balance = $account->balance + $value;
+        $account->save();
+        return $account;
+    }
+
+    public function createAccount(int $accountId, float $value): Account
+    {
+        $account = new Account();
+        $account->id = $accountId;
+        $account->balance = $value;
+        $account->save();
+
+        return $account;
+    }
 }

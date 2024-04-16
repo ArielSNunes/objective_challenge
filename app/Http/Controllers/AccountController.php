@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddBalanceRequest;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,24 @@ class AccountController extends Controller
         if (!$account) {
             return response()->json(null, 404);
         }
+
+        // Retorna a conta
+        return response()->json([
+            'conta_id' => $account->id,
+            'saldo' => $account->balance
+        ]);
+    }
+    /**
+     * Método responsável por adicionar saldo à conta
+     */
+    public function addBalance(AddBalanceRequest $request)
+    {
+        $accountId = $request->get('conta_id', null);
+
+        $account = $this->accountService->addBalanceOrCreateAccount(
+            $accountId,
+            $request->get('valor', null)
+        );
 
         // Retorna a conta
         return response()->json([
